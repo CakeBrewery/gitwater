@@ -10,7 +10,8 @@
   <h1>{{ title }}</h1>
 
   {% if file_contents %}
-    {{ file_contents }}
+  <strong>File Contents: </strong>
+  <pre><code>{{ file_contents }}</code></pre>
   {% endif %}
 
 

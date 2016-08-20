@@ -2,6 +2,10 @@ from flask import Flask
 from jinja2 import Environment, FileSystemLoader
 from git import Repo
 
+from pygments import highlight
+from pygments.lexers import guess_lexer, guess_lexer_for_filename
+from pygments.formatters import HtmlFormatter
+
 JINJA = Environment(loader=FileSystemLoader('templates'))
 
 TITLE = 'GitWater'
@@ -27,7 +31,7 @@ def fetch_file(filepath):
 
 def blob_to_string(blob):
     bytes_ = blob.data_stream.read()
-    return '{}'.format(bytes_.decode('utf-8').replace('\n', '<br />'))
+    return bytes_.decode('utf-8')
 
 
 @app.route('/')
@@ -42,5 +46,9 @@ def filename(filepath):
     if not file_:
         raise ValueError('Could not find such file')
 
+    file_string = blob_to_string(file_)
 
-    return render('main.html', title=TITLE, file_contents=blob_to_string(file_))
+    lexer = guess_lexer_for_filename(filepath, file_string)
+    file_contents_html = highlight(file_string, lexer, HtmlFormatter())
+
+    return render('main.html', title=TITLE, file_contents=file_contents_html)
