@@ -1,33 +1,22 @@
-from flask import Flask
-from jinja2 import Environment, FileSystemLoader
-from git import Repo
+from gitwater import app
 
 from pygments import highlight
 from pygments.lexers import guess_lexer, guess_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 
-JINJA = Environment(loader=FileSystemLoader('templates'))
-
-TITLE = 'GitWater'
-
-REPO = Repo('/Users/samueln/Projects/Synth-Brewery')
-
-
-
-app = Flask(__name__)
-
-
 
 def render(filename, *args, **kwargs):
-    return JINJA.get_template(filename).render(*args, **kwargs)
+    return app.config['JINJA'].get_template(filename).render(*args, **kwargs)
+
 
 def fetch_file(filepath):
-    commit = REPO.head.commit
+    commit = app.config['REPO'].head.commit
     tree = commit.tree
 
     for node in tree:
         if node.path == filepath:
             return node
+
 
 def blob_to_string(blob):
     bytes_ = blob.data_stream.read()
@@ -36,7 +25,7 @@ def blob_to_string(blob):
 
 @app.route('/')
 def main():
-    return render('main.html', title=TITLE)
+    return render('/main.html', title=app.config['TITLE'])
 
 
 @app.route('/<filepath>')
@@ -51,4 +40,4 @@ def filename(filepath):
     lexer = guess_lexer_for_filename(filepath, file_string)
     file_contents_html = highlight(file_string, lexer, HtmlFormatter())
 
-    return render('main.html', title=TITLE, file_contents=file_contents_html)
+    return render('main.html', title=app.config['TITLE'], file_contents=file_contents_html)
