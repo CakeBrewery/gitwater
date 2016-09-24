@@ -9,13 +9,32 @@
 
   <h1>{{ title }}</h1>
 
+  <strong>Choose Repo</strong>
+  <form action="/repository">
+    <input type="file" name="repository">
+    <input type="submit">
+  </form>
+
+  {% if file_list %}
+    <ul>
+    {% for file in file_list %}
+      <li><a href="/{{ file }}"> {{ file }}</a></li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if file_list %}
+    <ul>
+    {% for folder in folder_list %}
+      <li>{{ folder }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+
   {% if file_contents %}
   <strong>File Contents: </strong>
   <pre><code>{{ file_contents }}</code></pre>
   {% endif %}
-
-
-
-
 
 </body>

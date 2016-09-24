@@ -6,4 +6,4 @@ JINJA = Environment(loader=FileSystemLoader('gitwater/templates'))
 
 TITLE = 'GitWater'
 
-REPO = Repo('/Users/samueln/Projects/Synth-Brewery')
+REPO = "/full/path/to/your/git/repo"
