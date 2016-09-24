@@ -6,4 +6,4 @@ JINJA = Environment(loader=FileSystemLoader('gitwater/templates'))
 
 TITLE = 'GitWater'
 
-REPO = "/full/path/to/your/git/repo"
+REPO = Repo("/full/path/to/your/git/repo")  # TODO: Make interface to switch this "on the fly"
